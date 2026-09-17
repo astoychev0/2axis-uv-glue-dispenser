@@ -1,0 +1,11 @@
+# Временни файлове от Arduino IDE / PlatformIO
+*.bin
+*.elf
+*.hex
+/build/
+.pio/
+
+# Системни файлове
+.DS_Store
+Thumbs.db
+.vscode/
