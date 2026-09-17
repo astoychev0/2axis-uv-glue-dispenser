@@ -1,0 +1,29 @@
+name: Arduino Build & Code Quality Check
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  arduino-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Arduino CLI
+        uses: arduino/setup-arduino-cli@v2
+
+      - name: Install Arduino AVR Core & Libraries
+        run: |
+          arduino-cli core update-index
+          arduino-cli core install arduino:avr
+          # Инсталиране на популярни библиотеки за стъпкови мотори (ако се ползват)
+          arduino-cli lib install "AccelStepper" || true
+
+      - name: Compile Arduino Sketch
+        run: |
+          # Намира автоматично всеки .ino файл в репозиторито и го компилира за Arduino Uno/Nano
+          find . -name "*.ino" -exec arduino-cli compile --fqbn arduino:avr:uno {} \;
